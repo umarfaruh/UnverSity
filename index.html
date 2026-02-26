@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UniVerse — университеты и общежития</title>
+
+  <style>
+    :root{
+      --blue-900:#0B2E83;
+      --blue-800:#0E3AA6;
+      --blue-700:#1348C7;
+      --bg:#F4F7FF;
+      --text:#0F172A;
+      --muted:#64748B;
+      --card:#FFFFFF;
+      --line:#E5E7EB;
+      --shadow: 0 14px 30px rgba(15, 23, 42, .12);
+      --shadow-soft: 0 10px 20px rgba(15, 23, 42, .08);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 55%, #ffffff 100%);
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width:1150px; margin:0 auto; padding:0 18px}
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:20;
+      background: linear-gradient(90deg, var(--blue-900), var(--blue-700));
+      box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    }
+    .nav{
+      height:68px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800; letter-spacing:.2px; color:#fff;
+      font-size:20px;
+    }
+    .brand-badge{
+      width:36px; height:36px; border-radius:12px;
+      background: rgba(255,255,255,.18);
+      display:grid; place-items:center;
+      border: 1px solid rgba(255,255,255,.22);
+    }
+    .menu{
+      display:flex; align-items:center; gap:18px;
+      color:rgba(255,255,255,.9);
+      font-weight:600; font-size:14px;
+    }
+    .menu a{opacity:.9}
+    .menu a:hover{opacity:1; text-decoration:underline}
+    .nav-right{
+      display:flex; align-items:center; gap:10px;
+      color:#fff;
+    }
+    .pill{
+      display:flex; align-items:center; gap:8px;
+      padding:9px 12px; border-radius:999px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      font-weight:600; font-size:13px;
+    }
+
+    /* Hero */
+    .hero{
+      margin-top:18px;
+      background: linear-gradient(135deg, rgba(11,46,131,.95), rgba(19,72,199,.85));
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:-40% -30%;
+      background: radial-gradient(circle at 20% 40%, rgba(255,255,255,.16), transparent 55%),
+                  radial-gradient(circle at 70% 30%, rgba(255,255,255,.12), transparent 60%);
+      transform: rotate(8deg);
+      pointer-events:none;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:20px;
+      padding: 34px 28px;
+      position:relative;
+      z-index:1;
+    }
+    .hero h1{
+      margin:0 0 10px;
+      color:#fff;
+      font-size:42px;
+      line-height:1.08;
+      letter-spacing:-.4px;
+    }
+    .hero p{
+      margin:0 0 18px;
+      color: rgba(255,255,255,.85);
+      font-size:16px;
+      line-height:1.5;
+      max-width:54ch;
+    }
+    .hero-illustration{
+      height: 220px;
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06)),
+        url("https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=60");
+      background-size:cover;
+      background-position:center;
+      border: 1px solid rgba(255,255,255,.20);
+      position:relative;
+      overflow:hidden;
+    }
+    .pin{
+      position:absolute;
+      right:18px; top:18px;
+      background: rgba(255,255,255,.92);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight:800;
+      display:flex; align-items:center; gap:8px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.16);
+    }
+    .pin span{
+      width:10px; height:10px; border-radius:50%;
+      background: #FFB020;
+    }
+
+    /* Search bar */
+    .searchbar{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1.2fr .55fr .55fr .55fr;
+      gap: 10px;
+      background: rgba(255,255,255,.10);
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.18);
+      backdrop-filter: blur(8px);
+    }
+    .input, select{
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.92);
+      padding: 0 12px;
+      font-size: 14px;
+      outline:none;
+    }
+    .input:focus, select:focus{
+      border-color: rgba(255,255,255,.8);
+      box-shadow: 0 0 0 4px rgba(255,255,255,.20);
+    }
+    .btn{
+      height: 44px;
+      border:none;
+      border-radius: 12px;
+      background: #0B2E83;
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow: 0 12px 20px rgba(11,46,131,.25);
+    }
+    .btn:hover{filter: brightness(1.05)}
+    .btn:active{transform: translateY(1px)}
+
+    /* Section header */
+    .section{
+      padding: 22px 0 50px;
+    }
+    .section-top{
+      margin-top: 18px;
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap: 12px;
+    }
+    .section h2{
+      margin:0;
+      font-size:26px;
+      letter-spacing:-.2px;
+    }
+    .controls{
+      display:flex; align-items:center; gap:10px;
+      color: var(--muted);
+      font-weight:600;
+      font-size:13px;
+    }
+    .link{
+      color: var(--blue-800);
+      font-weight:700;
+      cursor:pointer;
+      user-select:none;
+    }
+    .link:hover{text-decoration:underline}
+
+    /* Cards */
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .card{
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      overflow:hidden;
+      box-shadow: var(--shadow-soft);
+      transition: transform .18s ease, box-shadow .18s ease;
+      display:flex;
+      flex-direction:column;
+      min-height: 360px;
+    }
+    .card:hover{
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    .thumb{
+      height: 150px;
+      background-size:cover;
+      background-position:center;
+    }
+    .card-body{
+      padding: 14px 14px 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      flex:1;
+    }
+    .title{
+      font-size:16px;
+      font-weight:900;
+      letter-spacing:-.1px;
+      margin:0;
+    }
+    .meta{
+      display:flex; flex-wrap:wrap; gap:8px 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight:600;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #F1F5FF;
+      border: 1px solid #DCE7FF;
+      color: #173B9F;
+      font-weight:800;
+      font-size:12px;
+    }
+    .row{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      margin-top:auto;
+    }
+    .stars{
+      display:flex; align-items:center; gap:8px;
+      font-weight:900;
+    }
+    .stars .s{
+      color:#F59E0B;
+      letter-spacing:1px;
+      font-size:14px;
+    }
+    .desc{
+      color: #475569;
+      font-size: 13px;
+      line-height:1.45;
+      margin:0;
+      display:-webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow:hidden;
+      min-height: 56px;
+    }
+    .actions{
+      display:flex; align-items:center; gap:10px;
+      margin-top: 2px;
+    }
+    .btn2{
+      flex:1;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid #DCE7FF;
+      background: #0E3AA6;
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .ghost{
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #0F172A;
+      font-weight:800;
+      cursor:pointer;
+      padding: 0 12px;
+      display:inline-flex; align-items:center; gap:8px;
+    }
+    .ghost.active{
+      border-color:#BFD4FF;
+      background:#F1F5FF;
+      color:#0E3AA6;
+    }
+    .compare-row{
+      margin-top: 10px;
+      color: var(--blue-800);
+      font-weight:800;
+      font-size:12px;
+      display:flex; justify-content:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    .compare-row:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      border-top: 1px solid #E9EEF9;
+      background: #fff;
+      padding: 28px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr .8fr;
+      gap: 16px;
+    }
+    .footer-title{font-weight:900; color: var(--text); margin-bottom:8px}
+    .small{font-size:12px; color:#94A3B8}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid{grid-template-columns:1fr; }
+      .hero-illustration{height: 190px}
+      .grid{grid-template-columns: repeat(2, 1fr);}
+      .searchbar{grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px){
+      .menu{display:none}
+      .grid{grid-template-columns: 1fr;}
+      .hero h1{font-size:34px}
+      .searchbar{grid-template-columns: 1fr;}
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="#">
+          <div class="brand-badge">U</div>
+          UniVerse
+        </a>
+
+        <nav class="menu">
+          <a href="#">Главная</a>
+          <a href="#">Университеты</a>
+          <a href="#">Общежития</a>
+          <a href="#">О нас</a>
+        </nav>
+
+        <div class="nav-right">
+          <div class="pill">👤 Профиль</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h1>Найди университет и общагу<br/>в своём городе</h1>
+          <p>Сравни учебные заведения по стоимости, рейтингам, отзывам и местоположению. Добавь в избранное и сравни варианты.</p>
+
+          <div class="searchbar">
+            <input id="q" class="input" placeholder="Поиск университета или специальности…" />
+
+            <select id="country">
+              <option value="">Казахстан (все)</option>
+              <option value="KZ">Казахстан</option>
+              <option value="KG">Кыргызстан</option>
+              <option value="UZ">Узбекистан</option>
+            </select>
+
+            <select id="city">
+              <option value="">Все города</option>
+              <option value="Алматы">Алматы</option>
+              <option value="Астана">Астана</option>
+              <option value="Шымкент">Шымкент</option>
+              <option value="Талдыкорган">Талдыкорган</option>
+            </select>
+
+            <button id="apply" class="btn">Подобрать варианты</button>
+          </div>
+        </div>
+
+        <div class="hero-illustration" aria-hidden="true">
+          <div class="pin"><span></span> Карта кампусов</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIST -->
+    <section class="section">
+      <div class="section-top">
+        <h2>Популярные университеты</h2>
+
+        <div class="controls">
+          <span>Сортировать:</span>
+          <select id="sort" style="height:36px; border-radius:10px; padding:0 10px;">
+            <option value="rating">по рейтингу</option>
+            <option value="price">по цене (дешевле)</option>
+            <option value="name">по названию</option>
+          </select>
+          <span class="link" id="reset">Сбросить</span>
+        </div>
+      </div>
+
+      <div id="cards" class="grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">UniVerse</div>
+          <div>Каталог университетов и общежитий. Сравнивай, сохраняй, выбирай.</div>
+          <div class="small" style="margin-top:10px;">©️ 2026 UniVerse. Учебный проект.</div>
+        </div>
+        <div>
+          <div class="footer-title">Разделы</div>
+          <div><a href="#">Университеты</a></div>
+          <div><a href="#">Общежития</a></div>
+          <div><a href="#">FAQ</a></div>
+        </div>
+        <div>
+          <div class="footer-title">Контакты</div>
+          <div>📩 universe.team@example.com</div>
+          <div>📍 Алматы</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const data = [
+      {
+        id: 1,
+        name: "КазНУ имени Аль-Фараби",
+        city: "Алматы",
+        country: "KZ",
+        dorm: true,
+        priceFrom: 400000,
+        rating: 4.6,
+        img: "https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=1200&q=60",
+        desc: "Один из крупнейших и старейших университетов Казахстана, расположен в Алматы и считается ведущим многопрофильным вузом."
+      },
+      {
+        id: 2,
+        name: "Академия гражданской авиации",
+        city: "Алматы",
+        country: "KZ",
+        dorm: true,
+        priceFrom: 400000,
+        rating: 4.6,
+        img: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1200&q=60",
+        desc: "Высшее учебное заведение, специализирующееся на подготовке авиационных специалистов и прикладных инженеров."
+      },
+      {
+        id: 3,
+        name: "Евразийский национальный университет",
+        city: "Астана",
+        country: "KZ",
+        dorm: true,
+        priceFrom: 450000,
+        rating: 4.5,
+        img: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=60",
+        desc: "Крупный университет Казахстана, расположенный в столице. Развитые программы и сильная академическая база."
+      },
+      {
+        id: 4,
+        name: "КазНПУ имени Абая",
+        city: "Алматы",
+        country: "KZ",
+        dorm: true,
+        priceFrom: 320000,
+        rating: 4.4,
+        img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=60",
+        desc: "Педагогический университет с богатой историей, сильными программами подготовки преподавателей и психологов."
+      },
+      {
+        id: 5,
+        name: "Университет (пример) — добавишь свой",
+        city: "Шымкент",
+        country: "KZ",
+        dorm: false,
+        priceFrom: 280000,
+        rating: 4.2,
+        img: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?auto=format&fit=crop&w=1200&q=60",
+        desc: "Шаблонная карточка для ваших данных: замените фото, описание, рейтинг и стоимость."
+      },
+      {
+        id: 6,
+        name: "Талдыкорганский университет (пример)",
+        city: "Талдыкорган",
+        country: "KZ",
+        dorm: true,
+        priceFrom: 240000,
+        rating: 4.1,
+        img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=60",
+        desc: "Ещё один пример карточки. Главное — факты + действия (подробнее/избранное/сравнить)."
+      }
+    ];
+
+    const state = {
+      q: "",
+      country: "",
+      city: "",
+      sort: "rating",
+      favorites: new Set(),
+      compare: new Set()
+    };
+
+    const elCards = document.getElementById("cards");
+
+    const fmtMoney = (n) => new Intl.NumberFormat("ru-RU").format(n) + " ₸";
+
+    function stars(rating){
+      const full = Math.round(rating);
+      return "★".repeat(Math.min(full,5)) + "☆".repeat(Math.max(0,5-full));
+    }
+
+    function applyFilters(items){
+      let res = [...items];
+
+      if(state.country){
+        res = res.filter(x => x.country === state.country);
+      }
+      if(state.city){
+        res = res.filter(x => x.city === state.city);
+      }
+      if(state.q.trim()){
+        const q = state.q.trim().toLowerCase();
+        res = res.filter(x =>
+          x.name.toLowerCase().includes(q) ||
+          x.desc.toLowerCase().includes(q) ||
+          x.city.toLowerCase().includes(q)
+        );
+      }
+
+      if(state.sort === "rating"){
+        res.sort((a,b)=> b.rating - a.rating);
+      } else if(state.sort === "price"){
+        res.sort((a,b)=> a.priceFrom - b.priceFrom);
+      } else if(state.sort === "name"){
+        res.sort((a,b)=> a.name.localeCompare(b.name, "ru"));
+      }
+      return res;
+    }
+
+    function render(){
+      const list = applyFilters(data);
+
+      elCards.innerHTML = list.map(x => {
+        const fav = state.favorites.has(x.id);
+        const cmp = state.compare.has(x.id);
+        return `
+          <article class="card">
+            <div class="thumb" style="background-image:url('${x.img}')"></div>
+            <div class="card-body">
+              <h3 class="title">${x.name}</h3>
+
+              <div class="meta">
+                <span class="chip">📍 ${x.city}</span>
+                <span class="chip">🏠 Общежитие: ${x.dorm ? "да" : "нет"}</span>
+                <span class="chip">💸 от ${fmtMoney(x.priceFrom)}</span>
+              </div>
+
+              <p class="desc">${x.desc}</p>
+
+              <div class="row">
+                <div class="stars">
+                  <span class="s">${stars(x.rating)}</span>
+                  <span>${x.rating.toFixed(1)}</span>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn2" onclick="openDetails(${x.id})">Подробнее</button>
+                <button class="ghost ${fav ? "active": ""}" onclick="toggleFav(${x.id})">
+                  ${fav ? "★ В избранном" : "☆ В избранное"}
+                </button>
+              </div>
+
+              <div class="compare-row" onclick="toggleCompare(${x.id})">
+                ${cmp ? "✓ В сравнении" : "+ Сравнить"}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      if(list.length === 0){
+        elCards.innerHTML = `
+          <div style="grid-column:1/-1; padding:22px; background:#fff; border:1px solid #E5E7EB; border-radius:18px;">
+            <div style="font-weight:900; font-size:16px;">Ничего не найдено</div>
+            <div style="color:#64748B; margin-top:6px;">Попробуйте изменить запрос или сбросить фильтры.</div>
+          </div>
+        `;
+      }
+    }
+
+    // Demo actions
+    window.openDetails = (id) => {
+      const item = data.find(x=>x.id===id);
+      alert("Открыть страницу: " + item.name + "\\n\\n(тут сделаете переход на /univer/ID.html)");
+    }
+
+    window.toggleFav = (id) => {
+      if(state.favorites.has(id)) state.favorites.delete(id);
+      else state.favorites.add(id);
+      render();
+    }
+
+    window.toggleCompare = (id) => {
+      if(state.compare.has(id)) state.compare.delete(id);
+      else {
+        if(state.compare.size >= 3){
+          alert("Можно сравнить максимум 3 вуза (пока демо).");
+          return;
+        }
+        state.compare.add(id);
+      }
+      render();
+    }
+
+    // Controls
+    document.getElementById("apply").addEventListener("click", () => {
+      state.q = document.getElementById("q").value;
+      state.country = document.getElementById("country").value;
+      state.city = document.getElementById("city").value;
+      render();
+    });
+
+    document.getElementById("sort").addEventListener("change", (e) => {
+      state.sort = e.target.value;
+      render();
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      state.q = "";
+      state.country = "";
+      state.city = "";
+      state.sort = "rating";
+      document.getElementById("q").value = "";
+      document.getElementById("country").value = "";
+      document.getElementById("city").value = "";
+      document.getElementById("sort").value = "rating";
+      render();
+    });
+
+    // Initial render
+    render();
+  </script>
+</body>
+</html>
