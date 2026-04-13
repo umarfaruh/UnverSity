@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniVerse — Общежития</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #f5f7ff, #ffffff);
+      color: #1f1f1f;
+    }
+
+    .navbar {
+      width: 100%;
+      background: linear-gradient(90deg, #0038ff, #1e4dff);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      box-shadow: 0 4px 14px rgba(0, 56, 255, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #222;
+      background: white;
+      padding: 10px 18px;
+      border-radius: 14px;
+      font-size: 14px;
+      transition: 0.25s ease;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: #eef3ff;
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      max-width: 1300px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .hero-box {
+      background: linear-gradient(135deg, #eaf1ff, #f8fbff);
+      border: 1px solid #d8e3ff;
+      border-radius: 28px;
+      padding: 36px 26px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      font-weight: 800;
+      color: #16213e;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: #5e6475;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 26px;
+      line-height: 1.6;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 180px;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      border: 1px solid #dbe5ff;
+      background: white;
+      padding: 15px 16px;
+      border-radius: 16px;
+      outline: none;
+      font-size: 15px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+    }
+
+    .filters button {
+      border: none;
+      background: #1540ff;
+      color: white;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .filters button:hover {
+      background: #0f31c8;
+    }
+
+    .stats {
+      max-width: 1300px;
+      margin: 22px auto 0;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+      border: 1px solid #edf1fb;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      color: #1540ff;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card p {
+      color: #687186;
+      font-size: 14px;
+    }
+
+    .section {
+      max-width: 1300px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .section-title h2 {
+      font-size: 30px;
+      color: #16213e;
+      font-weight: 800;
+    }
+
+    .section-title p {
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    .dorm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+    }
+
+    .dorm-card {
+      background: white;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.07);
+      border: 1px solid #edf1fb;
+      transition: 0.3s ease;
+    }
+
+    .dorm-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 34px rgba(21, 64, 255, 0.12);
+    }
+
+    .dorm-cover {
+      height: 170px;
+      background: linear-gradient(135deg, #92b7ff, #dce9ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      color: #1238cc;
+      font-weight: bold;
+    }
+
+    .dorm-content {
+      padding: 18px;
+    }
+
+    .dorm-name {
+      font-size: 21px;
+      font-weight: 800;
+      color: #1b2340;
+      margin-bottom: 8px;
+    }
+
+    .dorm-sub {
+      font-size: 14px;
+      color: #6a7285;
+      line-height: 1.5;
+      min-height: 44px;
+    }
+
+    .dorm-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      background: #eef3ff;
+      color: #2442b8;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .dorm-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      gap: 10px;
+    }
+
+    .price {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1540ff;
+    }
+
+    .dorm-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1540ff, #0f31c8);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(12, 41, 131, 0.3);
+    }
+
+    .btn-secondary {
+      background: #f2f6ff;
+      border: 1px solid #dbe5ff;
+      color: #1540ff;
+    }
+
+    .btn-secondary:hover {
+      background: #e8edff;
+      border-color: #bfd2ff;
+    }
+
+    .btn-favorited {
+      background: #ffe8ef;
+      border-color: #ffb6c1;
+      color: #d32f45;
+    }
+
+    .details-section {
+      max-width: 1300px;
+      margin: 30px auto 60px;
+      padding: 0 20px;
+    }
+
+    .details-box {
+      background: white;
+      border-radius: 28px;
+      padding: 28px 24px;
+      border: 1px solid #e7ebf7;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+      display: none;
+    }
+
+    .details-box.show {
+      display: block;
+      animation: fadeUp 0.35s ease;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .details-header h3 {
+      font-size: 30px;
+      color: #16213e;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .details-header p {
+      color: #6b7280;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 850px;
+    }
+
+    .close-btn {
+      border: none;
+      background: #eef3ff;
+      color: #2442b8;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      margin-top: 20px;
+    }
+
+    .detail-card {
+      background: #f8fbff;
+      border: 1px solid #e6edff;
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .detail-card h4 {
+      font-size: 20px;
+      color: #1d2747;
+      margin-bottom: 12px;
+    }
+
+    .detail-card ul {
+      padding-left: 18px;
+      color: #677086;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .features {
+      max-width: 1300px;
+      margin: 10px auto 70px;
+      padding: 0 20px;
+    }
+
+    .features-title {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .features-title h2 {
+      font-size: 34px;
+      color: #16213e;
+      margin-bottom: 8px;
+    }
+
+    .features-title p {
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+      border: 1px solid #edf1fb;
+      text-align: center;
+    }
+
+    .feature-card .icon {
+      font-size: 36px;
+      margin-bottom: 14px;
+    }
+
+    .feature-card h3 {
+      font-size: 22px;
+      color: #1f2a4b;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 15px;
+      color: #657084;
+      line-height: 1.6;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #687186;
+      font-size: 16px;
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #edf1fb;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    @media (max-width: 980px) {
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        width: 100%;
+      }
+
+      .nav-links a {
+        font-size: 13px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title h2,
+      .features-title h2,
+      .details-header h3 {
+        font-size: 24px;
+      }
+
+      .hero h1 {
+        font-size: 27px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">UniVerse</div>
+    <nav class="nav-links">
+      <a href="index5.html">Главная страница</a>
+      <a href="country.html">Поиск по странам</a>
+      <a href="obshaga.html" class="active">Общежитие</a>
+      <a href="info.html">Информация о нас</a>
+      <a href="../profile.html">Профиль</a>
+      <a href="../login.html">Выйти</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-box">
+      <h1>Общежития для студентов</h1>
+      <p>
+        Находите общежития при университетах, сравнивайте условия проживания,
+        стоимость, тип комнат, удобства и выбирайте самый комфортный вариант
+        для учебы и жизни.
+      </p>
+
+      <div class="filters">
+        <input type="text" id="searchInput" placeholder="Поиск по университету, городу или стране..." />
+        <select id="roomFilter">
+          <option value="all">Все типы комнат</option>
+          <option value="2-местная">2-местная</option>
+          <option value="3-местная">3-местная</option>
+          <option value="4-местная">4-местная</option>
+          <option value="семейная">Семейная</option>
+        </select>
+        <button onclick="renderDorms()">Найти</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat-card">
+      <h3 id="dormCount">0</h3>
+      <p>общежитий в каталоге</p>
+    </div>
+    <div class="stat-card">
+      <h3 id="countryCount">0</h3>
+      <p>стран представлено</p>
+    </div>
+    <div class="stat-card">
+      <h3 id="roomCount">0</h3>
+      <p>типов размещения</p>
+    </div>
+    <div class="stat-card">
+      <h3 id="favCount">0</h3>
+      <p>общежитий в избранном</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>Каталог общежитий</h2>
+      <p id="resultsInfo">Найдено общежитий: 0</p>
+    </div>
+
+    <div class="dorm-grid" id="dormGrid"></div>
+  </section>
+
+  <section class="details-section">
+    <div class="details-box" id="detailsBox">
+      <div class="details-header">
+        <div>
+          <h3 id="detailsTitle">Информация об общежитии</h3>
+          <p id="detailsSubtitle">Подробные условия проживания, удобства и особенности размещения.</p>
+        </div>
+        <button class="close-btn" onclick="closeDetails()">Закрыть</button>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-card">
+          <h4>Основная информация</h4>
+          <ul id="mainInfo"></ul>
+        </div>
+
+        <div class="detail-card">
+          <h4>Удобства и условия</h4>
+          <ul id="facilityInfo"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="features-title">
+      <h2>Что есть в разделе общежитий</h2>
+      <p>Не просто список, а нормальная страница, чтобы студенту было реально удобно.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">🏠</div>
+        <h3>Проживание</h3>
+        <p>Информация о доступных местах, типах комнат и условиях размещения студентов.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">💸</div>
+        <h3>Стоимость</h3>
+        <p>Сравнение цен на общежития, чтобы сразу понимать, где жить выгоднее.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">🛏️</div>
+        <h3>Удобства</h3>
+        <p>Кухня, прачечная, Wi-Fi, охрана, мебель и всё, что важно в повседневной жизни.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">📍</div>
+        <h3>Расположение</h3>
+        <p>Близость к кампусу, транспорту, магазинам и другим важным точкам для студентов.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    ©️ 2026 UniVerse — Платформа поиска университетов и студенческих общежитий
+  </footer>
+
+  <script>
+    const dormsData = [
+      {
+        name: "Общежитие КазНУ №1",
+        university: "КазНУ имени аль-Фараби",
+        city: "Алматы",
+        country: "Казахстан",
+        roomType: "3-местная",
+        price: "от 35 000 ₸ / месяц",
+        shortDesc: "Удобное размещение рядом с кампусом, подходит для студентов первых курсов.",
+        cover: "🏢",
+        address: "Кампус КазНУ, Алматы",
+        distance: "5 минут до учебных корпусов",
+        gender: "Раздельное размещение",
+        conditions: ["Wi-Fi", "Кухня на этаже", "Прачечная", "Пропускная система", "Мебель"],
+        rules: ["Заселение по студенческому билету", "Соблюдение комендантского порядка", "Чистота комнаты обязательна"]
+      },
+      {
+        name: "ENU Student House",
+        university: "ЕНУ имени Л.Н. Гумилёва",
+        city: "Астана",
+        country: "Казахстан",
+        roomType: "2-местная",
+        price: "от 45 000 ₸ / месяц",
+        shortDesc: "Современное общежитие с удобным расположением возле университета.",
+        cover: "🏬",
+        address: "Рядом с кампусом ЕНУ, Астана",
+        distance: "7 минут пешком",
+        gender: "Раздельное размещение",
+        conditions: ["Wi-Fi", "Учебные комнаты", "Прачечная", "Охрана", "Столовая рядом"],
+        rules: ["Проживание только для студентов", "Электронный пропуск", "Соблюдение внутреннего распорядка"]
+      },
+      {
+        name: "AlmaU Residence",
+        university: "AlmaU",
+        city: "Алматы",
+        country: "Казахстан",
+        roomType: "2-местная",
+        price: "от 60 000 ₸ / месяц",
+        shortDesc: "Комфортное студенческое проживание с хорошими базовыми условиями.",
+        cover: "🏠",
+        address: "Алматы, недалеко от AlmaU",
+        distance: "10 минут до корпуса",
+        gender: "Смешанный формат по блокам",
+        conditions: ["Wi-Fi", "Кухня", "Холодильник", "Зона отдыха", "Охрана"],
+        rules: ["Предоплата за месяц", "Соблюдение тишины ночью", "Запрет на порчу имущества"]
+      },
+      {
+        name: "Harvard Yard Dormitory",
+        university: "Harvard University",
+        city: "Cambridge",
+        country: "США",
+        roomType: "2-местная",
+        price: "от $950 / месяц",
+        shortDesc: "Классическое общежитие кампусного типа с удобной студенческой средой.",
+        cover: "🏛️",
+        address: "Cambridge, Massachusetts",
+        distance: "На территории кампуса",
+        gender: "Смешанное размещение",
+        conditions: ["Wi-Fi", "Общая кухня", "Study lounge", "Security", "Laundry"],
+        rules: ["Доступ по campus ID", "Соблюдение quiet hours", "Регистрация гостей обязательна"]
+      },
+      {
+        name: "MIT Student Residence",
+        university: "MIT",
+        city: "Cambridge",
+        country: "США",
+        roomType: "2-местная",
+        price: "от $1100 / месяц",
+        shortDesc: "Технологичный формат общежития для активной студенческой жизни.",
+        cover: "💡",
+        address: "MIT Campus, Cambridge",
+        distance: "3 минуты до корпусов",
+        gender: "Смешанное размещение",
+        conditions: ["High-speed Wi-Fi", "Study spaces", "Kitchen", "Security", "Laundry"],
+        rules: ["ID-пропуск", "Правила совместного проживания", "Соблюдение campus policy"]
+      },
+      {
+        name: "Oxford Student Hall",
+        university: "University of Oxford",
+        city: "Oxford",
+        country: "Великобритания",
+        roomType: "1-местная",
+        price: "от £800 / месяц",
+        shortDesc: "Тихое и академичное проживание рядом с учебной средой Оксфорда.",
+        cover: "📚",
+        address: "Oxford, United Kingdom",
+        distance: "В пешей доступности",
+        gender: "Смешанное размещение",
+        conditions: ["Wi-Fi", "Common room", "Security", "Heating", "Study areas"],
+        rules: ["Соблюдение академической дисциплины", "Контроль доступа", "Запрет на шум ночью"]
+      },
+      {
+        name: "TUM Campus Dorm",
+        university: "Technical University of Munich",
+        city: "Munich",
+        country: "Германия",
+        roomType: "3-местная",
+        price: "от €420 / месяц",
+        shortDesc: "Практичный вариант для студентов с удобной транспортной доступностью.",
+        cover: "🚆",
+        address: "Munich, Germany",
+        distance: "12 минут на транспорте",
+        gender: "Смешанное размещение",
+        conditions: ["Wi-Fi", "Laundry", "Shared kitchen", "Bike parking", "Security"],
+        rules: ["Контракт на семестр", "Соблюдение правил блока", "Ответственность за имущество"]
+      },
+      {
+        name: "University of Toronto Residence",
+        university: "University of Toronto",
+        city: "Toronto",
+        country: "Канада",
+        roomType: "2-местная",
+        price: "от CAD 900 / месяц",
+        shortDesc: "Удобное общежитие с хорошей инфраструктурой и студенческой атмосферой.",
+        cover: "🍁",
+        address: "Toronto, Canada",
+        distance: "Рядом с кампусом",
+        gender: "Смешанное размещение",
+        conditions: ["Wi-Fi", "Kitchen", "Study hall", "Laundry", "24/7 security"],
+        rules: ["Проживание по договору", "Пропускной режим", "Соблюдение чистоты"]
+      },
+      {
+        name: "NUS Student Hostel",
+        university: "National University of Singapore",
+        city: "Singapore",
+        country: "Сингапур",
+        roomType: "4-местная",
+        price: "от SGD 550 / месяц",
+        shortDesc: "Популярное общежитие с развитой инфраструктурой и безопасной средой.",
+        cover: "🌆",
+        address: "NUS Campus, Singapore",
+        distance: "На территории кампуса",
+        gender: "Раздельные блоки",
+        conditions: ["Wi-Fi", "Air conditioning", "Laundry", "Security", "Cafeteria"],
+        rules: ["Электронный пропуск", "Соблюдение campus rules", "Ответственность за порядок"]
+      },
+      {
+        name: "Seoul National Dorm",
+        university: "Seoul National University",
+        city: "Seoul",
+        country: "Южная Корея",
+        roomType: "2-местная",
+        price: "от ₩480 000 / месяц",
+        shortDesc: "Современное проживание для студентов с хорошими условиями и учебной атмосферой.",
+        cover: "🌃",
+        address: "Seoul, South Korea",
+        distance: "8 минут до учебных зданий",
+        gender: "Раздельное размещение",
+        conditions: ["Wi-Fi", "Heating", "Laundry", "Kitchen", "Study area"],
+        rules: ["Система доступа по карте", "Тишина после 23:00", "Уважение соседей"]
+      },
+      {
+        name: "University of Melbourne Lodge",
+        university: "University of Melbourne",
+        city: "Melbourne",
+        country: "Австралия",
+        roomType: "семейная",
+        price: "от AUD 1200 / месяц",
+        shortDesc: "Хороший вариант для студентов и молодых семей с расширенными условиями.",
+        cover: "☀️",
+        address: "Melbourne, Australia",
+        distance: "15 минут до кампуса",
+        gender: "Семейное размещение",
+        conditions: ["Wi-Fi", "Private kitchen", "Laundry", "Security", "Parking"],
+        rules: ["Контракт на длительный срок", "Соблюдение условий аренды", "Бережное отношение к имуществу"]
+      },
+      {
+        name: "UAEU Student Residence",
+        university: "United Arab Emirates University",
+        city: "Al Ain",
+        country: "ОАЭ",
+        roomType: "3-местная",
+        price: "от AED 700 / месяц",
+        shortDesc: "Комфортное студенческое общежитие с базовыми и дополнительными удобствами.",
+        cover: "🌴",
+        address: "Al Ain, UAE",
+        distance: "6 минут до кампуса",
+        gender: "Раздельное размещение",
+        conditions: ["Wi-Fi", "Prayer room", "Laundry", "Security", "Common lounge"],
+        rules: ["Соблюдение правил кампуса", "Тихий режим ночью", "Регистрация гостей"]
+      }
+    ];
+
+    const dormGrid = document.getElementById("dormGrid");
+    const searchInput = document.getElementById("searchInput");
+    const roomFilter = document.getElementById("roomFilter");
+    const detailsBox = document.getElementById("detailsBox");
+    let dormFavorites = [];
+
+    function loadDormFavorites() {
+      dormFavorites = JSON.parse(localStorage.getItem('universe_dorm_favorites') || '[]');
+    }
+
+    function saveDormFavorites() {
+      localStorage.setItem('universe_dorm_favorites', JSON.stringify(dormFavorites));
+    }
+
+    function toggleDormFavorite(dormName) {
+      const idx = dormFavorites.indexOf(dormName);
+      if (idx !== -1) {
+        dormFavorites.splice(idx, 1);
+      } else {
+        dormFavorites.push(dormName);
+      }
+      saveDormFavorites();
+      renderDorms();
+    }
+
+    function updateFavoriteCount() {
+      const favCountElem = document.getElementById('favCount');
+      if (favCountElem) {
+        favCountElem.textContent = dormFavorites.length;
+      }
+    }
+
+    function updateStats() {
+      document.getElementById("dormCount").textContent = dormsData.length;
+
+      const uniqueCountries = [...new Set(dormsData.map(item => item.country))];
+      document.getElementById("countryCount").textContent = uniqueCountries.length;
+
+      const uniqueRooms = [...new Set(dormsData.map(item => item.roomType))];
+      document.getElementById("roomCount").textContent = uniqueRooms.length;
+
+      updateFavoriteCount();
+    }
+
+    function renderDorms() {
+      const query = searchInput.value.trim().toLowerCase();
+      const roomValue = roomFilter.value;
+
+      const filtered = dormsData.filter(dorm => {
+        const matchesSearch =
+          dorm.name.toLowerCase().includes(query) ||
+          dorm.university.toLowerCase().includes(query) ||
+          dorm.city.toLowerCase().includes(query) ||
+          dorm.country.toLowerCase().includes(query);
+
+        const matchesRoom =
+          roomValue === "all" || dorm.roomType === roomValue;
+
+        return matchesSearch && matchesRoom;
+      });
+
+      dormGrid.innerHTML = "";
+      document.getElementById("resultsInfo").textContent = `Найдено общежитий: ${filtered.length}`;
+
+      if (filtered.length === 0) {
+        dormGrid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            Ничего не найдено. Попробуй изменить запрос или выбрать другой тип комнаты.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(dorm => {
+        const card = document.createElement("div");
+        card.className = "dorm-card";
+
+        card.innerHTML = `
+          <div class="dorm-cover">${dorm.cover}</div>
+          <div class="dorm-content">
+            <div class="dorm-name">${dorm.name}</div>
+            <div class="dorm-sub">${dorm.shortDesc}</div>
+
+            <div class="dorm-info">
+              <span class="pill">${dorm.country}</span>
+              <span class="pill">${dorm.city}</span>
+              <span class="pill">${dorm.roomType}</span>
+            </div>
+
+            <div class="dorm-bottom">
+              <div class="price">${dorm.price}</div>
+              <div class="dorm-actions">
+                <button class="btn btn-primary" onclick="event.stopPropagation(); showDetails(dorm)">Подробнее</button>
+                <button class="btn btn-secondary ${dormFavorites.includes(dorm.name) ? 'btn-favorited' : ''}" onclick="event.stopPropagation(); toggleDormFavorite('${dorm.name}')">
+                  ${dormFavorites.includes(dorm.name) ? '❤️ В избранном' : '♡ В избранное'}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        card.onclick = () => showDetails(dorm);
+        dormGrid.appendChild(card);
+      });
+    }
+
+    function showDetails(dorm) {
+      document.getElementById("detailsTitle").textContent = `${dorm.cover} ${dorm.name}`;
+      document.getElementById("detailsSubtitle").textContent = `${dorm.university} • ${dorm.city}, ${dorm.country}`;
+
+      const mainInfo = document.getElementById("mainInfo");
+      const facilityInfo = document.getElementById("facilityInfo");
+
+      mainInfo.innerHTML = `
+        <li><strong>Университет:</strong> ${dorm.university}</li>
+        <li><strong>Город:</strong> ${dorm.city}</li>
+        <li><strong>Страна:</strong> ${dorm.country}</li>
+        <li><strong>Тип комнаты:</strong> ${dorm.roomType}</li>
+        <li><strong>Стоимость:</strong> ${dorm.price}</li>
+        <li><strong>Адрес:</strong> ${dorm.address}</li>
+        <li><strong>Расстояние до кампуса:</strong> ${dorm.distance}</li>
+        <li><strong>Формат размещения:</strong> ${dorm.gender}</li>
+      `;
+
+      facilityInfo.innerHTML = `
+        ${dorm.conditions.map(item => `<li>${item}</li>`).join("")}
+        ${dorm.rules.map(item => `<li>${item}</li>`).join("")}
+      `;
+
+      detailsBox.classList.add("show");
+      detailsBox.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function closeDetails() {
+      detailsBox.classList.remove("show");
+    }
+
+    searchInput.addEventListener("input", renderDorms);
+    roomFilter.addEventListener("change", renderDorms);
+
+    loadDormFavorites();
+    updateStats();
+    renderDorms();
+  </script>
+</body>
+</html>
