@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniVerse Pro - Поиск Университетов</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #062abb;
+      --secondary: #ff6b6b;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --accent: #4ecdc4;
+      --success: #2ecc71;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease;
+    }
+
+    .slide-in-left {
+      animation: slideInLeft 0.6s ease;
+    }
+
+    .slide-in-right {
+      animation: slideInRight 0.6s ease;
+    }
+
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+
+    .btn-hover {
+      transition: all 0.3s ease;
+    }
+
+    .btn-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(6, 42, 187, 0.3);
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .navbar {
+      background: linear-gradient(90deg, var(--primary) 0%, #0a4bb8 100%);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      color: #ffd700;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .nav-center {
+      flex: 1;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin: 0 2rem;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 2px solid transparent;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .nav-btn:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(255,255,255,0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffd700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .search-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 2rem;
+    }
+
+    .search-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .search-input label {
+      font-weight: 600;
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    .search-input input,
+    .search-input select {
+      padding: 0.8rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .search-input input:focus,
+    .search-input select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #f0f7ff;
+      box-shadow: 0 0 0 3px rgba(6, 42, 187, 0.1);
+    }
+
+    .search-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #0a4bb8);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(6, 42, 187, 0.3);
+    }
+
+    .universities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .university-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .university-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+
+    .card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+
+    .card-location {
+      color: #999;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card-desc {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: auto;
+    }
+
+    .card-btn {
+      flex: 1;
+      padding: 0.7rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .btn-view {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-view:hover {
+      background: #0a4bb8;
+    }
+
+    .btn-favorite {
+      background: #f0f0f0;
+      color: #999;
+      border: 2px solid #e0e0e0;
+    }
+
+    .btn-favorite.favorited {
+      background: #ffe0e0;
+      color: var(--secondary);
+      border-color: var(--secondary);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #999;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: #ddd;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 95%;
+      max-width: 500px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #f0f7ff;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      color: #999;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      position: relative;
+      bottom: -2px;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .divider {
+      text-align: center;
+      margin: 1.5rem 0;
+      color: #999;
+    }
+
+    .success-message {
+      background: #e8f5e9;
+      color: var(--success);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .success-message.active {
+      display: block;
+    }
+
+    .filters-bar {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .results-info {
+      color: #666;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+
+      .nav-center {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 0;
+        width: 100%;
+      }
+
+      .nav-btn {
+        width: 100%;
+        text-align: center;
+      }
+
+      .search-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .universities-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        flex-wrap: wrap;
+      }
+
+      .filters-bar {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <i class="fas fa-graduation-cap"></i>
+    UniVerse Pro
+  </div>
+  <div class="nav-center">
+    <button class="nav-btn" onclick="goHome()">
+      <i class="fas fa-home"></i> Главная
+    </button>
+    <button class="nav-btn" onclick="goObshaga()">
+      <i class="fas fa-building"></i> Общежитие
+    </button>
+    <button class="nav-btn" onclick="goInfo()">
+      <i class="fas fa-info-circle"></i> О нас
+    </button>
+  </div>
+  <div class="nav-right">
+    <div class="user-info" onclick="goProfile()" id="userInfo" style="display:none;">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <span id="userName">Пользователь</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+    <button class="nav-btn" onclick="openAuthModal()" id="loginBtn">
+      <i class="fas fa-sign-in-alt"></i> Вход/Регистрация
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+  <!-- SEARCH SECTION -->
+  <div class="search-section">
+    <h1 class="search-title">🎓 Найди свой университет</h1>
+    
+    <div class="search-grid">
+      <div class="search-input">
+        <label for="searchQuery">Название университета</label>
+        <input type="text" id="searchQuery" placeholder="Поиск...">
+      </div>
+      
+      <div class="search-input">
+        <label for="countryFilter">Страна</label>
+        <select id="countryFilter">
+          <option value="">Все страны</option>
+          <option value="Казахстан">Казахстан</option>
+          <option value="США">США</option>
+          <option value="Япония">Япония</option>
+        </select>
+      </div>
+      
+      <div class="search-input">
+        <label for="cityFilter">Город</label>
+        <select id="cityFilter">
+          <option value="">Все города</option>
+          <option value="Алматы">Алматы</option>
+          <option value="Астана">Астана</option>
+          <option value="Бостан">Бостан</option>
+          <option value="Токио">Токио</option>
+        </select>
+      </div>
+      
+      <div class="search-input">
+        <label for="ratingFilter">Минимальный рейтинг</label>
+        <select id="ratingFilter">
+          <option value="">Любой</option>
+          <option value="4">⭐ 4+ звёзды</option>
+          <option value="3">⭐ 3+ звёзды</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="search-buttons">
+      <button class="btn btn-primary" onclick="search()">
+        <i class="fas fa-search"></i> Поиск
+      </button>
+      <button class="btn btn-primary" onclick="resetSearch()">
+        <i class="fas fa-redo"></i> Очистить
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTERS BAR -->
+  <div class="filters-bar" id="filtersBar">
+    <span class="results-info" id="resultsInfo">Загрузка...</span>
+    <select onchange="sort(this.value)" id="sortBy">
+      <option value="">Сортировка: Популярность</option>
+      <option value="name">По названию (А-Я)</option>
+      <option value="city">По городу</option>
+      <option value="rating">По рейтингу</option>
+    </select>
+  </div>
+
+  <!-- UNIVERSITIES GRID -->
+  <div id="universitiesContainer">
+    <div class="empty-state">
+      <i class="fas fa-search"></i>
+      <p>Нажмите кнопку "Поиск" для отображения университетов</p>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Вход</h2>
+      <button class="modal-close" onclick="closeAuthModal()">×</button>
+    </div>
+
+    <div class="success-message" id="successMessage">
+      <i class="fas fa-check-circle"></i> Успешно!
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Вход</button>
+      <button class="tab-btn" onclick="switchTab('register')">Регистрация</button>
+    </div>
+
+    <!-- LOGIN TAB -->
+    <div id="loginTab" class="tab-content active">
+      <form onsubmit="emailLogin(event)">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" required placeholder="your@email.com">
+        </div>
+
+        <div class="form-group">
+          <label>Пароль</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          <i class="fas fa-sign-in-alt"></i> Войти
+        </button>
+      </form>
+    </div>
+
+    <!-- REGISTER TAB -->
+    <div id="registerTab" class="tab-content">
+      <form onsubmit="emailRegister(event)">
+        <div class="form-group">
+          <label>Полное имя</label>
+          <input type="text" id="registerName" required placeholder="Иван Иванов">
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="registerEmail" required placeholder="your@email.com">
+        </div>
+
+        <div class="form-group">
+          <label>Номер телефона (опционально)</label>
+          <input type="tel" id="registerPhone" placeholder="+7 (XXX) XXX-XX-XX">
+        </div>
+
+        <div class="form-group">
+          <label>Пароль</label>
+          <input type="password" id="registerPassword" required placeholder="Минимум 8 символов">
+        </div>
+
+        <div class="form-group">
+          <label>Подтверждение пароля</label>
+          <input type="password" id="registerPasswordConfirm" required placeholder="Подтвердите пароль">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          <i class="fas fa-user-plus"></i> Создать аккаунт
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+const universitiesData = [
+  {id: 1, name: "КазНУ", country: "Казахстан", city: "Алматы", desc: "Казахский национальный университет им. аль-Фараби", img: "https://farabi.university/images/default_news.png", link: "univer/kazakhstan/Almaty/kaznu.html", rating: 4.8},
+  {id: 2, name: "ЕНУ", country: "Казахстан", city: "Астана", desc: "Евразийский национальный университет им. Л.Н. Гумилева", img: "https://upload.wikimedia.org/wikipedia/commons/f/f8/L.N.Gumilyov_Eurasian_National_University.JPG", link: "univer/kazakhstan/Astana/enu.html", rating: 4.6},
+  {id: 3, name: "AlmaU", country: "Казахстан", city: "Алматы", desc: "Алматинский университет экономики и статистики", img: "https://almau.edu.kz/wp-content/uploads/2025/01/IMG_5614-scaled-2.jpg", link: "univer/kazakhstan/Almaty/almau.html", rating: 3.7},
+  {id: 4, name: "АТУ", country: "Казахстан", city: "Алматы", desc: "Алматинский технологический университет", img: "https://avatars.mds.yandex.net/get-altay/911432/2a0000018ed179e9f3fae46939fafe19bbd8/L_height", link: "univer/kazakhstan/Almaty/aty.html", rating: 4.4},
+  {id: 5, name: "Академия гражданской авиации", country: "Казахстан", city: "Алматы", desc: "Академия гражданской авиации г. Алматы", img: "https://upload.wikimedia.org/wikipedia/commons/7/7d/ALAKazAGA.JPG", link: "univer/kazakhstan/Almaty/Civil_Aviation_Academy.html", rating: 4.3},
+  {id: 6, name: "DMU", country: "Казахстан", city: "Алматы", desc: "Де Монтфорт Юниверсити Казахстан", img: "https://static.wixstatic.com/media/f48cb8_fb23b6ad805a4976a1d0c56b5bbee614~mv2.jpg/v1/fill/w_568,h_426,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/f48cb8_fb23b6ad805a4976a1d0c56b5bbee614~mv2.jpg", link: "univer/kazakhstan/Almaty/DMU Kazakhstan.html", rating: 4.2},
+  {id: 7, name: "ЕТУ", country: "Казахстан", city: "Алматы", desc: "Евразийский Технологический Университет", img: "https://nurlysaulet.kz/assets/images/projects/ETU/etu-thumb-01-min.jpg", link: "univer/kazakhstan/Almaty/ety.html", rating: 4.1},
+  {id: 8, name: "КАЗНМУ", country: "Казахстан", city: "Алматы", desc: "Казахский национальный медицинский университет", img: "https://kaznmu.edu.kz/wp-content/uploads/2024/06/230601-20-scaled.jpg", link: "univer/kazakhstan/Almaty/Kaznmy.html", rating: 4.7},
+  {id: 9, name: "КазНАУ", country: "Казахстан", city: "Алматы", desc: "Казахский национальный аграрный университет", img: "https://eldala.kz/uploads/all/21/72/89/217289c44c8d9def3928e59ab51b8bfe.jpg", link: "univer/kazakhstan/Almaty/KazNAU.html", rating: 4.0},
+  {id: 10, name: "Satbayev", country: "Казахстан", city: "Алматы", desc: "Satbayev University", img: "https://the-tech.kz/wp-content/uploads/2024/02/9b680f70-0a7f-4e1c-909a-c07b57b7f496.jpg", link: "univer/kazakhstan/Almaty/Satbayev.html", rating: 4.9},
+  {id: 11, name: "MIT", country: "США", city: "Бостан", desc: "Массачусетский технологический институт", img: "https://upload.wikimedia.org/wikipedia/commons/0/0c/MIT_Dome.jpg", link: "univer/UST/mit.html", rating: 5.0},
+  {id: 12, name: "Токийский Университет", country: "Япония", city: "Токио", desc: "Ведущий национальный университет Японии", img: "https://www.u-tokyo.ac.jp/images/top_image.jpg", link: "univer/Yaponiya/yaponiya.html", rating: 4.9},
+  {id: 13, name: "ЦАУ", country: "Казахстан", city: "Алматы", desc: "Центрально-Азиатский университет г.Алматы", img: "https://wikicity.kz/fotos_ms/Company_5506_tIqV2bTydTEIEkC9quRdSV6f.jpeg", link: "univer/kazakhstan/Almaty/CAU.html", rating: 4.8},
+  {id: 14, name: "КазАСТ", country: "Казахстан", city: "Алматы", desc: "Казахская академия спорта и туризма", img: "https://kazast.edu.kz/wp-content/uploads/2022/08/IMG_3852-1-1170x610.jpg", link: "univer/kazakhstan/Almaty/КаzАСТ.html", rating: 4.8},
+  {id: 15, name: "ЕУИК", country: "Казахстан", city: "Алматы", desc: "Египетский университет исламской культуры «Нур-Мубарак» ", img: "https://www.nmu.edu.kz/wp-content/uploads/2025/05/Nur-Mubarak-p1zaefom3ugxmlmrfwrx3n4n6d5xth506a8ocloprk-1024x495.jpg", link: "univer/kazakhstan/Almaty/EYIK.html", rating: 4.8},
+  {id: 16, name: "АГЭУ", country: "Казахстан", city: "Алматы", desc: "Алматинский гуманитарно-экономический университет", img: "https://avatars.mds.yandex.net/get-altay/9753788/2a0000018a1a6793e80bcf1551159de35da0/orig", link: "univer/kazakhstan/Almaty/gumaniter.html", rating: 4.8},
+  {id: 17, name: "Кайнар", country: "Казахстан", city: "Алматы", desc: "Академия Кайнар", img: "https://kz.gorodwiki.ru/photo/385881.jpg", link: "#", rating: 4.8},
+
+  // ❗ FIX ДЛЯ СЛОМАННОГО IMG
+  {id: 18, name: "КазАДИ", country: "Казахстан", city: "Алматы", desc: "Автодорожный институт", img: "https://via.placeholder.com/300", link: "#", rating: 4.8},
+
+  {id: 19, name: "КазАТиСО", country: "Казахстан", city: "Алматы", desc: "Технологический университет", img: "https://kazatu.edu.kz/wp-content/uploads/2024/06/230601-20-scaled.jpg", link: "#", rating: 4.8},
+  {id: 20, name: "КазМУНО", country: "Казахстан", city: "Алматы", desc: "Медицинский университет", img: "https://liter.kz/cache/imagine/1200/uploads/news/2021/02/15/kazmuno-2.jpg", link: "#", rating: 4.8},
+  {id: 21, name: "Консерватория", country: "Казахстан", city: "Алматы", desc: "Курмангазы", img: "https://www.conservatoire.edu.kz/upload/iblock/b15.jpg", link: "#", rating: 4.8},
+  {id: 22, name: "КазНАИ", country: "Казахстан", city: "Алматы", desc: "Академия искусств", img: "https://vlast.kz/media/upload/images/5b07.jpg", link: "#", rating: 4.8},
+  {id: 23, name: "QYZPU", country: "Казахстан", city: "Алматы", desc: "Женский педагогический университет", img: "https://avatars.mds.yandex.net/get-altay/3629247/orig", link: "#", rating: 4.8},
+  {id: 24, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 25, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 26, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 27, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 28, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 29, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 30, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 31, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 32, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 33, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 34, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 35, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 36, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 37, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 38, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 39, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 40, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 41, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 42, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 43, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.8},
+  {id: 999, name: "TEST", country: "Казахстан", city: "Алматы", desc: "Проверка", img: "https://via.placeholder.com/300", link: "#", rating: 5},
+];
+
+let filtered = [...universitiesData];
+
+function render(){
+  document.getElementById("count").innerText = "Найдено: " + filtered.length;
+
+  document.getElementById("list").innerHTML =
+    filtered.map(u=>`
+      <div class="card">
+        <img src="${u.img}">
+        <div class="card-content">
+          <h3>${u.name}</h3>
+          <p>${u.city}, ${u.country}</p>
+          <p>${u.desc}</p>
+        </div>
+      </div>
+    `).join('');
+}
+
+function search(){
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  const city = document.getElementById("city").value;
+
+  filtered = data.filter(u =>
+    (!q || u.name.toLowerCase().includes(q)) &&
+    (!city || u.city === city)
+  );
+
+  render();
+}
+
+function reset(){
+  filtered = [...universitiesData];
+  render();
+}
+
+window.onload = render;
+
+
+let filteredData = [];
+let currentUser = null;
+let favorites = [];
+
+// INITIALIZATION
+window.onload = () => {
+  checkAuthStatus();
+  loadFavorites();
+
+  // 🔥 ВАЖНО: показываем ВСЕ универы сразу
+  filteredData = universitiesData;
+  renderUniversities();
+
+  document.getElementById('resultsInfo').textContent = `📊 Результаты: ${filteredData.length} университетов`;
+};
+
+// AUTH FUNCTIONS
+function checkAuthStatus() {
+  const user = localStorage.getItem('universe_currentUser');
+  if (user) {
+    currentUser = JSON.parse(user);
+    updateUserUI();
+  }
+}
+
+function updateUserUI() {
+  if (currentUser) {
+    document.getElementById('userInfo').style.display = 'flex';
+    document.getElementById('loginBtn').style.display = 'none';
+    document.getElementById('userName').textContent = currentUser.name || 'Пользователь';
+    const initials = (currentUser.name || 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('userAvatar').textContent = initials;
+  } else {
+    document.getElementById('userInfo').style.display = 'none';
+    document.getElementById('loginBtn').style.display = 'flex';
+  }
+}
+
+function openAuthModal() {
+  document.getElementById('authModal').classList.add('active');
+}
+
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('active');
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  
+  document.getElementById(tab + 'Tab').classList.add('active');
+  event.target.classList.add('active');
+  
+  document.getElementById('modalTitle').textContent = tab === 'login' ? 'Вход' : 'Регистрация';
+}
+
+function emailLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const password = document.getElementById('loginPassword').value;
+
+  if (password.length < 8) {
+    alert('❌ Пароль должен содержать минимум 8 символов');
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem('universe_users') || '[]');
+  const user = users.find(u => u.email === email && u.password === password);
+
+  if (user) {
+    currentUser = user;
+    localStorage.setItem('universe_currentUser', JSON.stringify(user));
+    updateUserUI();
+    showSuccess('✅ Успешный вход!');
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPassword').value = '';
+    setTimeout(() => closeAuthModal(), 1000);
+  } else {
+    alert('❌ Неверный email или пароль');
+  }
+}
+
+function emailRegister(e) {
+  e.preventDefault();
+  const name = document.getElementById('registerName').value.trim();
+  const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+  const phone = document.getElementById('registerPhone').value.trim();
+  const password = document.getElementById('registerPassword').value;
+  const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+
+  let hasError = false;
+
+  if (!name || name.length < 2) {
+    alert('❌ Введите ваше имя (минимум 2 символа)');
+    hasError = true;
+  }
+
+  if (!email.includes('@')) {
+    alert('❌ Введите корректный email');
+    hasError = true;
+  }
+
+  if (password.length < 8) {
+    alert('❌ Пароль должен содержать минимум 8 символов');
+    hasError = true;
+  }
+
+  if (password !== passwordConfirm) {
+    alert('❌ Пароли не совпадают');
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  const users = JSON.parse(localStorage.getItem('universe_users') || '[]');
+  if (users.find(u => u.email === email)) {
+    alert('❌ Email уже зарегистрирован');
+    return;
+  }
+
+  const newUser = {
+    id: Date.now(),
+    name,
+    email,
+    phone,
+    password,
+    createdAt: new Date().toISOString(),
+    favorites: []
+  };
+
+  users.push(newUser);
+  localStorage.setItem('universe_users', JSON.stringify(users));
+
+  currentUser = newUser;
+  localStorage.setItem('universe_currentUser', JSON.stringify(newUser));
+  updateUserUI();
+  showSuccess('✅ Аккаунт создан успешно!');
+  
+  // Очистить форму
+  document.getElementById('registerName').value = '';
+  document.getElementById('registerEmail').value = '';
+  document.getElementById('registerPhone').value = '';
+  document.getElementById('registerPassword').value = '';
+  document.getElementById('registerPasswordConfirm').value = '';
+  
+  setTimeout(() => closeAuthModal(), 1000);
+}
+
+function showSuccess(message) {
+  const msg = document.getElementById('successMessage');
+  msg.textContent = message;
+  msg.classList.add('active');
+  setTimeout(() => msg.classList.remove('active'), 3000);
+}
+
+// SEARCH FUNCTIONS
+function search() {
+  const query = document.getElementById('searchQuery').value.toLowerCase();
+  const country = document.getElementById('countryFilter').value;
+  const city = document.getElementById('cityFilter').value;
+  const rating = document.getElementById('ratingFilter').value;
+
+  filteredData = universitiesData.filter(u => {
+  const matchQuery = !query || u.name.toLowerCase().includes(query) || u.desc.toLowerCase().includes(query);
+  const matchCountry = !country || u.country === country;
+  const matchCity = !city || u.city === city;
+  const matchRating = !rating || u.rating >= parseFloat(rating);
+  return matchQuery && matchCountry && matchCity && matchRating;
+});
+
+  renderUniversities();
+}
+
+function resetSearch() {
+  document.getElementById('searchQuery').value = '';
+  document.getElementById('countryFilter').value = '';
+  document.getElementById('cityFilter').value = '';
+  document.getElementById('ratingFilter').value = '';
+  document.getElementById('sortBy').value = '';
+  filteredData = [];
+  document.getElementById('universitiesContainer').innerHTML = `
+    <div class="empty-state">
+      <i class="fas fa-search"></i>
+      <p>Нажмите кнопку "Поиск" для отображения университетов</p>
+    </div>
+  `;
+  document.getElementById('resultsInfo').textContent = 'Загрузите результаты поиска';
+}
+
+function sort(type) {
+  if (!filteredData.length) return;
+
+  if (type === 'name') {
+    filteredData.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+  } else if (type === 'city') {
+    filteredData.sort((a, b) => a.city.localeCompare(b.city, 'ru'));
+  } else if (type === 'rating') {
+    filteredData.sort((a, b) => b.rating - a.rating);
+  }
+  
+  renderUniversities();
+}
+
+function renderUniversities() {
+  const container = document.getElementById('universitiesContainer');
+  
+  if (!filteredData.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-search"></i>
+        <p>По вашему запросу ничего не найдено</p>
+      </div>
+    `;
+    document.getElementById('resultsInfo').textContent = 'Результаты: 0';
+    return;
+  }
+
+  document.getElementById('resultsInfo').textContent = `📊 Результаты: ${filteredData.length} университет(ов)`;
+
+  container.innerHTML = `
+    <div class="universities-grid">
+      ${filteredData.map(u => `
+        <div class="university-card card-hover fade-in">
+          <div class="card-image" style="background-image: url('${u.img}'); background-size: cover;">
+            <div class="card-badge">⭐ ${u.rating}</div>
+          </div>
+          <div class="card-content">
+            <h3 class="card-title">${u.name}</h3>
+            <div class="card-location">
+              <i class="fas fa-map-marker-alt"></i> ${u.city}, ${u.country}
+            </div>
+            <p class="card-desc">${u.desc}</p>
+            <div class="card-actions">
+              <button class="card-btn btn-view" onclick="goToUniversity('${u.link}')">
+                <i class="fas fa-arrow-right"></i> Подробнее
+              </button>
+              <button class="card-btn btn-favorite ${favorites.includes(u.id) ? 'favorited' : ''}" 
+                      onclick="toggleFavorite(${u.id}, '${u.name}')">
+                <i class="fas fa-heart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function goToUniversity(link) {
+  window.location.href = link;
+}
+
+// FAVORITES
+function loadFavorites() {
+  favorites = JSON.parse(localStorage.getItem('universe_favorites') || '[]');
+}
+
+async function toggleFavorite(id, name) {
+  if (!universeAuth.isAuthenticated()) {
+    alert('❌ Сначала войдите в систему');
+    universeAuth.openModal();
+    return;
+  }
+
+  const isCurrentlyFavorite = universeAuth.isFavorite(id);
+
+  try {
+    let result;
+    if (isCurrentlyFavorite) {
+      result = await universeAuth.removeFromFavorites(id);
+    } else {
+      result = await universeAuth.addToFavorites(id);
+    }
+
+    if (result.success) {
+      // Update local favorites array for UI
+      if (isCurrentlyFavorite) {
+        favorites = favorites.filter(f => f !== id);
+      } else {
+        favorites.push(id);
+      }
+      localStorage.setItem('universe_favorites', JSON.stringify(favorites));
+
+      renderUniversities();
+      showSuccess(`${isCurrentlyFavorite ? '💔 Удалено' : '❤️ Добавлено'} из избранного`);
+    } else {
+      showError('Ошибка при обновлении избранного: ' + result.error);
+    }
+  } catch (error) {
+    console.error('Toggle favorite error:', error);
+    showError('Ошибка сети при обновлении избранного');
+  }
+}
+
+// NAVIGATION
+function goHome() {
+  window.location.href = 'index2.html';
+}
+
+function goObshaga() {
+  window.location.href = 'obshaga/obshaga.html';
+}
+
+function goInfo() {
+  window.location.href = 'info.html';
+}
+
+function goProfile() {
+  if (!currentUser) {
+    alert('❌ Сначала войдите в систему');
+    openAuthModal();
+    return;
+  }
+  window.location.href = 'profile.html';
+        }
+    </script>
+</body>
+</html>
