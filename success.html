@@ -1,0 +1,11 @@
+<script>
+// даём доступ
+let user = JSON.parse(localStorage.getItem("user")) || {};
+
+user.isSubscribed = true;
+
+localStorage.setItem("user", JSON.stringify(user));
+
+// обратно на страницу универа
+window.location.href = "/univer/UST/mit.html";
+</script>
