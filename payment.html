@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Оплата</title>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+
+<h2>Купить доступ</h2>
+<button id="payBtn">Оплатить</button>
+
+<script>
+const stripe = Stripe("ТВОЙ_PUBLIC_KEY");
+
+document.getElementById("payBtn").addEventListener("click", () => {
+  fetch("/create-checkout-session", {
+    method: "POST"
+  })
+  .then(res => res.json())
+  .then(data => {
+    return stripe.redirectToCheckout({ sessionId: data.id });
+  });
+});
+</script>
+
+
+<h2>Оплата подписки</h2>
+<button onclick="pay()">Оплатить через Kaspi</button>
+
+<script>
+function pay() {
+  fetch("http://localhost:3000/kaspi/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId: "1" })
+  })
+  .then(res => res.json())
+  .then(data => {
+    window.location.href = data.url; // Kaspi redirect
+  });
+}
+</script>
+</body>
+</html>
